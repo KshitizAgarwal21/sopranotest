@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 var mongoose = require('mongoose');
 var REGISTER_SCHEMA = require('./Schema/REGISTER_SCHEMA');
 const POSTS_SCHEMA = require('./Schema/POSTS_SCHEMA.JS');
+const RouteGuard = require('./Middleware/RouteGuard');
 const { ObjectId } = require('bson');
 const path = require("path");
 const PORT = 8080 || PROCESS.env.PORT;
@@ -126,7 +127,7 @@ app.post('/login', async (req, res) => {
 
 //Create  a new Post
 
-app.post('/newpost', async (req, res) => {
+app.post('/newpost', RouteGuard, async (req, res) => {
     //Check if user logged in
     if (req.headers.authorization == null) {
         res.status(400).send({ msg: "Kindly login to continue" });
@@ -170,7 +171,7 @@ app.post('/newpost', async (req, res) => {
 
 //Retrieve posts by ID
 
-app.post('/myposts', async (req, res) => {
+app.post('/myposts', RouteGuard, async (req, res) => {
     if (req.headers.authorization == null) {
         res.status(400).send({ msg: "Kindly login to continue" });
     }
@@ -183,7 +184,7 @@ app.post('/myposts', async (req, res) => {
     }
 })
 // Retrieve all the posts by all users
-app.post('/allposts', async (req, res) => {
+app.post('/allposts', RouteGuard, async (req, res) => {
     if (req.headers.authorization == null) {
         res.status(400).send({ msg: "Kindly login to see the posts" });
     }
@@ -195,7 +196,7 @@ app.post('/allposts', async (req, res) => {
 
 //Find and delete post
 
-app.delete('/deletepost', async (req, res) => {
+app.delete('/deletepost', RouteGuard, async (req, res) => {
     if (req.headers.authorization == null) {
         res.status(400).send({ msg: "Kindly login to continue" });
     }
@@ -211,7 +212,7 @@ app.delete('/deletepost', async (req, res) => {
 
 //Find and update post
 
-app.post('/modifypost', async (req, res) => {
+app.post('/modifypost', RouteGuard, async (req, res) => {
     if (req.headers.authorization == null) {
         res.status(400).send({ msg: "Kindly login to continue" });
     }
